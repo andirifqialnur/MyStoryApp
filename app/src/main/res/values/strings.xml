@@ -1,0 +1,50 @@
+<resources>
+    <string name="app_name">Story App</string>
+    <string name="add_story_menu">Add Story Menu</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="upload">Upload</string>
+    <string name="email_warning">Wrong email format</string>
+    <string name="password_warning">Password must have at least 6 characters</string>
+    <string name="name_warning">Name can\'t be empty</string>
+    <string name="register_success">Register success</string>
+    <string name="register_fail">Register fail</string>
+    <string name="login_success">Login success</string>
+    <string name="login_fail">Login fail</string>
+    <string name="fail_load_stories">Stories failed to load</string>
+    <string name="success_load_stories">Stories success to load</string>
+    <string name="permission_denied">Permission denied</string>
+    <string name="upload_success">Upload success</string>
+    <string name="upload_fail">Upload fail</string>
+    <string name="language_setting">Change Language</string>
+    <string name="fail_take_picture">Fail to take picture</string>
+    <string name="fail_show_camera">Fail to show camera</string>
+
+    <string name="story_app">Story App</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="account_question">Don\'t have an account yet?</string>
+    <string name="name">Name</string>
+    <string name="description">Description</string>
+
+    <string name="sign_in">Sign In</string>
+    <string name="top_desc">| Share your own experience</string>
+    <string name="desc_signin">We already miss you</string>
+    <string name="desc_signup">Fill free to share your own experience</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="agreement">I agree to the platform accessing my information</string>
+    <string name="have_account">Already have an account?</string>
+    <string name="detail_image">detail_image</string>
+    <string name="add_story_desc">Add Your Story</string>
+    <string name="add_story_desc2">Keep enjoying your life and share with us</string>
+    <string name="main_desc">See what are people doing</string>
+    <string name="main_desc2">All people around the world share their activities. What about you?</string>
+    <string name="detail_desc">See Your Story</string>
+    <string name="detail_desc2">All People around the world can see you too</string>
+    <string name="created_at">Created At</string>
+
+    <string name="add_story">Add Story</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="owner">Andi Rifqial Nur</string>
+    <string name="from">from</string>
+</resources>

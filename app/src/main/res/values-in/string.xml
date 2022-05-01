@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aplikasi Story</string>
+    <string name="story_app">Aplikasi Story</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="account_question">Tidak mempunyai akun ?</string>
+    <string name="name">Nama</string>
+    <string name="description">Ini adalah deskripsi</string>
+    <string name="add_story_menu">Menu Tambah Story</string>
+    <string name="camera">Kamera</string>
+    <string name="gallery">Galeri</string>
+    <string name="upload">Unggah</string>
+    <string name="email_warning">Format email salah</string>
+    <string name="password_warning">Password harus terdiri minimal 6 karakter</string>
+    <string name="name_warning">Nama tidak boleh kosong</string>
+    <string name="register_success">Berhasil daftar akun</string>
+    <string name="register_fail">Gagal daftar akun</string>
+    <string name="login_success">Berhasil masuk akun</string>
+    <string name="login_fail">Gagal masuk akun</string>
+    <string name="fail_load_stories">Daftar story gagal dimuat</string>
+    <string name="success_load_stories">Daftar story berhasil dimuat</string>
+    <string name="permission_denied">Izin ditolak</string>
+    <string name="upload_success">Berhasil mengunggah gambar</string>
+    <string name="upload_fail">Gagal mengunggah gambar</string>
+    <string name="language_setting">Atur Bahasa</string>
+    <string name="fail_take_picture">Gagal mengambil gambar</string>
+    <string name="fail_show_camera">Gagal memunculkan kamera</string>
+
+    <string name="sign_in">Masuk</string>
+    <string name="top_desc">| Bagikan pengalaman mu</string>
+    <string name="desc_signin">Kami merindukanmu</string>
+    <string name="desc_signup">Buatlah dirimu bebas dengan membagikan pengalaman</string>
+    <string name="sign_up">Daftar</string>
+    <string name="agreement">Saya setuju dengan program untuk mengakses informasi saya</string>
+    <string name="have_account">Sudah punya akun?</string>
+    <string name="detail_image">detail_gambar</string>
+    <string name="add_story_desc">Tambahkan cerita kamu</string>
+    <string name="add_story_desc2">Tetap nikmati hidup anda dan bagikan dengan kami</string>
+    <string name="main_desc">Mari lihat apa yang orang lakukan</string>
+    <string name="main_desc2">Semua orang di seluruh dunia membagikan aktifitas mereka. Bagaimana denganmu?</string>
+    <string name="detail_desc">Lihat cerita anda</string>
+    <string name="detail_desc2">Semua orang diseluruh dunia dapat melihatmu</string>
+    <string name="created_at">Terbuat</string>
+    <string name="from">dari</string>
+    <string name="owner">Andi Rifqial Nur</string>
+
+    <string name="add_story">Tambah cerita</string>
+    <string name="sign_out">Keluar</string>
+</resources>
