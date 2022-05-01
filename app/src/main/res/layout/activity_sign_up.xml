@@ -114,28 +114,22 @@
         app:boxCornerRadiusBottomEnd="10dp"
         app:boxCornerRadiusBottomStart="10dp"
         android:textColorHint="@color/grey4"
-        app:helperText="Required*"
         app:counterEnabled="true"
         app:counterMaxLength="50"
-        app:helperTextTextColor="@color/red2"
-        app:endIconDrawable="@drawable/ic_check_circle"
-        app:errorEnabled="true"
-        app:errorIconDrawable="@drawable/ic_error"
-        app:errorIconTint="@color/red"
         app:boxCornerRadiusTopEnd="10dp"
         app:endIconMode="custom">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.aran.mystoryapp.custom.EmailCustom
             android:id="@+id/email"
-            android:backgroundTint="@color/blue3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/blue3"
             android:drawableStart="@drawable/ic_email"
             android:drawablePadding="10dp"
             android:fontFamily="@font/qs_medium"
-            android:textColor="@color/grey2"
-            android:inputType="textEmailAddress"
             android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/grey2"
             android:textSize="15sp"/>
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -154,24 +148,21 @@
         app:boxCornerRadiusBottomEnd="10dp"
         app:boxCornerRadiusBottomStart="10dp"
         android:textColorHint="@color/grey4"
-        app:helperText="Required*"
         app:counterEnabled="true"
         app:counterMaxLength="30"
         app:endIconMode="password_toggle"
-        app:errorEnabled="true"
-        app:helperTextTextColor="@color/red2"
         app:boxCornerRadiusTopEnd="10dp">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.aran.mystoryapp.custom.PassCustom
             android:id="@+id/pass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/ic_password"
             android:drawablePadding="10dp"
             android:fontFamily="@font/qs_medium"
+            android:hint="@string/password"
             android:inputType="textPassword"
             android:textColor="@color/grey2"
-            android:hint="@string/password"
             android:textSize="15sp"/>
 
     </com.google.android.material.textfield.TextInputLayout>

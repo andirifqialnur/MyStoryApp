@@ -6,16 +6,21 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatButton
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import com.aran.mystoryapp.R
 import com.aran.mystoryapp.api.ApiConfig
+import com.aran.mystoryapp.custom.EmailCustom
+import com.aran.mystoryapp.custom.PassCustom
 import com.aran.mystoryapp.databinding.ActivitySignUpBinding
 import com.aran.mystoryapp.helper.SharedViewModel
 import com.aran.mystoryapp.helper.UserPreference
@@ -32,6 +37,10 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignUpBinding
     private lateinit var mainViewModel: SharedViewModel
 
+    private lateinit var emailCustom: EmailCustom
+    private lateinit var passCustom: PassCustom
+    private lateinit var btnSignUp : AppCompatButton
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignUpBinding.inflate(layoutInflater)
@@ -42,9 +51,11 @@ class SignUpActivity : AppCompatActivity() {
 
         playAnimation()
 
+        emailCustom = binding.email
+        passCustom = binding.pass
+        btnSignUp = binding.btnSignUp
+
         nameValidate()
-        emailValidate()
-        passwordValidate()
 
         binding.btnSignUp.setOnClickListener {
             val name = binding.name.text.toString()
@@ -57,6 +68,30 @@ class SignUpActivity : AppCompatActivity() {
         binding.toSignIn.setOnClickListener {
             startActivity(Intent(this, SignInActivity::class.java))
         }
+
+        emailCustom.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                setLoginButton()
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+        })
+        passCustom.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                setLoginButton()
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+        })
     }
 
     private fun playAnimation() {
@@ -158,52 +193,15 @@ class SignUpActivity : AppCompatActivity() {
         return null
     }
 
-    private fun emailValidate() {
-        binding.email.setOnFocusChangeListener { _, focused ->
-            if (!focused) {
-                binding.edittext2.helperText = validEmail()
-            }
-        }
-    }
-
-    private fun validEmail(): String? {
-        val emailValue = binding.email.text.toString()
-        if (!Patterns.EMAIL_ADDRESS.matcher(emailValue).matches()) {
-            return "Invalid Email Address"
-        }
-        return null
-    }
-
-    private fun passwordValidate() {
-        binding.pass.setOnFocusChangeListener { _, focused ->
-            if (!focused) {
-                binding.edittext3.helperText = validPass()
-            }
-        }
-    }
-
-    private fun validPass(): String? {
-        val passValue = binding.pass.text.toString()
-        if (passValue.length < 8) {
-            return "Minimum 8 Character Password"
-        }
-        if (!passValue.matches(".*[A-Z].*".toRegex())) {
-            return "Must Contain 1 Upper-case Character"
-        }
-        if (!passValue.matches(".*[a-z].*".toRegex())) {
-            return "Must Contain 1 Lower-case Character"
-        }
-        if (!passValue.matches(".*[A-Z].*".toRegex())) {
-            return "Must Contain 1 Upper-case Character"
-        }
-        if (!passValue.matches(".*[@#$%^?&*].*".toRegex())) {
-            return "Must Contain 1 Special Character (@#\$%^?&*)"
-        }
-        return null
-    }
-
     companion object {
         private const val TAG = "Register Activity"
+    }
+
+    private fun setLoginButton() {
+        val email = emailCustom.text.toString()
+        if (passCustom.length() >= 8 && Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            btnSignUp.isEnabled =true
+        }
     }
 
 }

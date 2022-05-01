@@ -11,4 +11,8 @@ class Helper (context: Context){
     fun clear(){
         editor.clear().apply()
     }
+
+    fun getToken(key: String) : String? {
+        return  pref.getString(key, null)
+    }
 }

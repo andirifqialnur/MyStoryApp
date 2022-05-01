@@ -63,6 +63,13 @@ class MainActivity : AppCompatActivity() {
             this,
             ViewModelFactory(UserPreference.getInstance(dataStore))
         )[SharedViewModel::class.java]
+
+        storyViewModel.getUser().observe(this) { user ->
+            if(user.isLogin) {
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -79,14 +86,11 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.menu_logout -> {
-                help.clear()
                 AlertDialog.Builder(this)
                     .setTitle("Sign Out")
                     .setMessage("Do you want to Sign Out?")
                     .setPositiveButton("Yes"){_, _ ->
-                        startActivity(Intent(this@MainActivity, SignInActivity::class.java))
-                        Toast.makeText(applicationContext, "Logged Out", Toast.LENGTH_LONG).show()
-                        finish()}
+                        signOut()}
                     .setNegativeButton("No"){_,_->}
                     .show()
             }
@@ -149,6 +153,13 @@ class MainActivity : AppCompatActivity() {
         } else {
             binding.progressBar.visibility = View.GONE
         }
+    }
+
+    private fun signOut() {
+        help.clear()
+        startActivity(Intent(this, SignInActivity::class.java))
+        Toast.makeText(applicationContext, "Logged Out", Toast.LENGTH_LONG).show()
+        finish()
     }
 
     companion object {

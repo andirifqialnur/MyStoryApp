@@ -15,7 +15,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.datastore.core.DataStore
@@ -42,8 +41,10 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 class AddStoryActivity : AppCompatActivity() {
 
     private lateinit var addStoryViewModel: SharedViewModel
-    private lateinit var help: Helper
     private lateinit var binding: ActivityAddStoryBinding
+
+    private lateinit var help: Helper
+
     private var getFile: File? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,12 +52,12 @@ class AddStoryActivity : AppCompatActivity() {
         binding = ActivityAddStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        help = Helper(this)
-
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
 
         setupViewModel()
+
+        help = Helper(this)
 
         if (!allPermissionsGranted()) {
             ActivityCompat.requestPermissions(
@@ -75,9 +76,10 @@ class AddStoryActivity : AppCompatActivity() {
         }
 
         binding.uploadBtn.setOnClickListener {
-            uploadImage()
+            uploadStory()
         }
     }
+
     private fun setupViewModel() {
         addStoryViewModel = ViewModelProvider(
             this,
@@ -88,28 +90,20 @@ class AddStoryActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.option_menu, menu)
-
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.menu_language -> {
-                startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
+                val intent = Intent(Settings.ACTION_LOCALE_SETTINGS)
+                startActivity(intent)
                 return true
             }
 
             R.id.menu_logout -> {
-                help.clear()
-                AlertDialog.Builder(this)
-                    .setTitle("Sign Out")
-                    .setMessage("Do you want to Sign Out?")
-                    .setPositiveButton("Yes"){_, _ ->
-                        startActivity(Intent(this@AddStoryActivity, SignInActivity::class.java))
-                        Toast.makeText(applicationContext, "Logged Out", Toast.LENGTH_LONG).show()
-                        finish()}
-                    .setNegativeButton("No"){_,_->}
-                    .show()
+                signOut()
+                return true
             }
         }
         return true
@@ -146,7 +140,7 @@ class AddStoryActivity : AppCompatActivity() {
         launcherIntentGallery.launch(chooser)
     }
 
-    private fun uploadImage() {
+    private fun uploadStory() {
         showLoading(true)
 
         if (getFile != null) {
@@ -162,7 +156,7 @@ class AddStoryActivity : AppCompatActivity() {
 
             addStoryViewModel.getUser().observe(this) {
                 if(it != null) {
-                    val client = ApiConfig.getApiService().uploadImage("Bearer " + it.token, imageMultipart, description)
+                    val client = ApiConfig.getApiService().uploadStory("Bearer " + it.token, imageMultipart, description)
                     client.enqueue(object: Callback<Responses> {
                         override fun onResponse(
                             call: Call<Responses>,
@@ -234,6 +228,13 @@ class AddStoryActivity : AppCompatActivity() {
         onBackPressed()
         finish()
         return true
+    }
+
+    private fun signOut() {
+        help.clear()
+        startActivity(Intent(this, SignInActivity::class.java))
+        Toast.makeText(applicationContext, "Logged Out", Toast.LENGTH_LONG).show()
+        finish()
     }
 
     companion object {

@@ -18,10 +18,4 @@ class SharedViewModel(private val pref: UserPreference) : ViewModel() {
             pref.saveUser(user)
         }
     }
-
-    fun signOut() {
-        viewModelScope.launch {
-            pref.signOut()
-        }
-    }
 }

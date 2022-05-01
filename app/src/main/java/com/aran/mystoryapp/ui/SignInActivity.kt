@@ -6,15 +6,21 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import android.util.Patterns
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatButton
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import com.aran.mystoryapp.R
 import com.aran.mystoryapp.api.ApiConfig
+import com.aran.mystoryapp.custom.EmailCustom
+import com.aran.mystoryapp.custom.PassCustom
 import com.aran.mystoryapp.databinding.ActivitySignInBinding
 import com.aran.mystoryapp.helper.SharedViewModel
 import com.aran.mystoryapp.helper.UserPreference
@@ -32,6 +38,10 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var mainViewModel: SharedViewModel
     private lateinit var binding: ActivitySignInBinding
 
+    private lateinit var emailCustom: EmailCustom
+    private lateinit var passCustom: PassCustom
+    private lateinit var btnSignIn : AppCompatButton
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignInBinding.inflate(layoutInflater)
@@ -41,6 +51,10 @@ class SignInActivity : AppCompatActivity() {
         setupViewModel()
 
         playAnimation()
+
+        emailCustom = binding.email
+        passCustom = binding.pass
+        btnSignIn = binding.btnSignIn
 
         binding.btnSignIn.setOnClickListener {
             val email = binding.email.text.toString()
@@ -52,6 +66,30 @@ class SignInActivity : AppCompatActivity() {
         binding.toSignUp.setOnClickListener {
             startActivity(Intent(this, SignUpActivity::class.java))
         }
+
+        emailCustom.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                setLoginButton()
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+        })
+        passCustom.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                setLoginButton()
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+        })
     }
 
     private fun setupViewModel() {
@@ -59,6 +97,13 @@ class SignInActivity : AppCompatActivity() {
             this,
             ViewModelFactory(UserPreference.getInstance(dataStore))
         )[SharedViewModel::class.java]
+
+        mainViewModel.getUser().observe(this) { user ->
+            if(user.isLogin) {
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            }
+        }
     }
 
     private fun playAnimation() {
@@ -120,6 +165,13 @@ class SignInActivity : AppCompatActivity() {
             binding.progressBar.visibility = View.VISIBLE
         } else {
             binding.progressBar.visibility = View.GONE
+        }
+    }
+
+    private fun setLoginButton() {
+        val email = emailCustom.text.toString()
+        if (passCustom.length() >= 8 && Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            btnSignIn.isEnabled =true
         }
     }
 

@@ -29,7 +29,7 @@ interface ApiService {
 
     @Multipart
     @POST("stories")
-    fun uploadImage(
+    fun uploadStory(
         @Header("Authorization") header: String,
         @Part file: MultipartBody.Part,
         @Part("description") description: RequestBody,
