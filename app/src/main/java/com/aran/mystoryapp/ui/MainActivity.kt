@@ -20,7 +20,6 @@ import com.aran.mystoryapp.R
 import com.aran.mystoryapp.adapter.StoryAdapter
 import com.aran.mystoryapp.api.ApiConfig
 import com.aran.mystoryapp.databinding.ActivityMainBinding
-import com.aran.mystoryapp.helper.Helper
 import com.aran.mystoryapp.helper.SharedViewModel
 import com.aran.mystoryapp.helper.UserPreference
 import com.aran.mystoryapp.helper.ViewModelFactory
@@ -36,7 +35,6 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 class MainActivity : AppCompatActivity() {
 
     private lateinit var storyViewModel: SharedViewModel
-    private lateinit var help: Helper
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,9 +42,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        help = Helper(this)
-
-        setupViewModel()
+        storyViewModel = ViewModelProvider(this, ViewModelFactory(UserPreference.getInstance(dataStore)
+            ))[SharedViewModel::class.java]
 
         val layoutManager = LinearLayoutManager(this)
         binding.recycleview.layoutManager = layoutManager
@@ -55,20 +52,6 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnAddStory.setOnClickListener {
             startActivity(Intent(this, AddStoryActivity::class.java))
-        }
-    }
-
-    private fun setupViewModel() {
-        storyViewModel = ViewModelProvider(
-            this,
-            ViewModelFactory(UserPreference.getInstance(dataStore))
-        )[SharedViewModel::class.java]
-
-        storyViewModel.getUser().observe(this) { user ->
-            if(user.isLogin) {
-                startActivity(Intent(this, MainActivity::class.java))
-                finish()
-            }
         }
     }
 
@@ -156,10 +139,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun signOut() {
-        help.clear()
+        storyViewModel.signOut()
         startActivity(Intent(this, SignInActivity::class.java))
-        Toast.makeText(applicationContext, "Logged Out", Toast.LENGTH_LONG).show()
-        finish()
     }
 
     companion object {

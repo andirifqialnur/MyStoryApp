@@ -2,7 +2,6 @@ package com.aran.mystoryapp.ui
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,29 +12,19 @@ import android.util.Patterns
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.ViewModelProvider
 import com.aran.mystoryapp.R
 import com.aran.mystoryapp.api.ApiConfig
 import com.aran.mystoryapp.custom.EmailCustom
 import com.aran.mystoryapp.custom.PassCustom
 import com.aran.mystoryapp.databinding.ActivitySignUpBinding
-import com.aran.mystoryapp.helper.SharedViewModel
-import com.aran.mystoryapp.helper.UserPreference
-import com.aran.mystoryapp.helper.ViewModelFactory
 import com.aran.mystoryapp.response.Responses
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
-
 class SignUpActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignUpBinding
-    private lateinit var mainViewModel: SharedViewModel
 
     private lateinit var emailCustom: EmailCustom
     private lateinit var passCustom: PassCustom
@@ -46,8 +35,6 @@ class SignUpActivity : AppCompatActivity() {
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
-
-        setupViewModel()
 
         playAnimation()
 
@@ -137,7 +124,7 @@ class SignUpActivity : AppCompatActivity() {
                 Log.d(TAG, "onResponse: $responseBody")
                 if(response.isSuccessful && responseBody?.message == "User created") {
                     Toast.makeText(this@SignUpActivity, getString(R.string.register_success), Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this@SignUpActivity, MainActivity::class.java)
+                    val intent = Intent(this@SignUpActivity, SignInActivity::class.java)
                     startActivity(intent)
                 } else {
                     Log.e(TAG, "onFailure1: ${response.message()}")
@@ -151,20 +138,6 @@ class SignUpActivity : AppCompatActivity() {
                 Toast.makeText(this@SignUpActivity, getString(R.string.register_fail), Toast.LENGTH_SHORT).show()
             }
         })
-    }
-
-    private fun setupViewModel() {
-        mainViewModel = ViewModelProvider(
-            this,
-            ViewModelFactory(UserPreference.getInstance(dataStore))
-        )[SharedViewModel::class.java]
-
-        mainViewModel.getUser().observe(this) { user ->
-            if(user.isLogin) {
-                startActivity(Intent(this, MainActivity::class.java))
-                finish()
-            }
-        }
     }
 
     private fun showLoading(isLoading: Boolean) {
