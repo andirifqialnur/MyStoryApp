@@ -43,8 +43,6 @@ class AddStoryActivity : AppCompatActivity() {
     private lateinit var addStoryViewModel: SharedViewModel
     private lateinit var binding: ActivityAddStoryBinding
 
-    private lateinit var help: Helper
-
     private var getFile: File? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,8 +54,6 @@ class AddStoryActivity : AppCompatActivity() {
         supportActionBar?.setHomeButtonEnabled(true)
 
         setupViewModel()
-
-        help = Helper(this)
 
         if (!allPermissionsGranted()) {
             ActivityCompat.requestPermissions(
@@ -231,10 +227,8 @@ class AddStoryActivity : AppCompatActivity() {
     }
 
     private fun signOut() {
-        help.clear()
+        addStoryViewModel.signOut()
         startActivity(Intent(this, SignInActivity::class.java))
-        Toast.makeText(applicationContext, "Logged Out", Toast.LENGTH_LONG).show()
-        finish()
     }
 
     companion object {

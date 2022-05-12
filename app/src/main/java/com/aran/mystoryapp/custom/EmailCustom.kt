@@ -33,10 +33,10 @@ class EmailCustom: AppCompatEditText, View.OnTouchListener {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
             }
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (Patterns.EMAIL_ADDRESS.matcher(s.toString()).matches()) {
-                    error = null
+                error = if (Patterns.EMAIL_ADDRESS.matcher(s.toString()).matches()) {
+                    null
                 } else {
-                    error = "Wrong Email Format"
+                    "Wrong Email Format"
                 }
             }
             override fun afterTextChanged(s: Editable) {

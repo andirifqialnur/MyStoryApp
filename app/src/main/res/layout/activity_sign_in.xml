@@ -111,7 +111,6 @@
         app:boxCornerRadiusTopStart="10dp"
         app:counterEnabled="true"
         app:counterMaxLength="30"
-        app:endIconMode="password_toggle"
         app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="@+id/edittext1"
         app:layout_constraintHorizontal_bias="0.0"

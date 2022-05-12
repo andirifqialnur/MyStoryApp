@@ -15,9 +15,6 @@ class DetailStoryActivity : AppCompatActivity() {
         binding = ActivityDetailStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeButtonEnabled(true)
-
         val story = intent.getParcelableExtra<StoryModel>(DETAIL_STORY) as StoryModel
         Glide.with(this)
             .load(story.image)
@@ -25,12 +22,6 @@ class DetailStoryActivity : AppCompatActivity() {
         binding.name.text = story.name
         binding.description.text = story.description
         binding.createAt.text = story.createAt
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        finish()
-        return true
     }
 
     companion object {
