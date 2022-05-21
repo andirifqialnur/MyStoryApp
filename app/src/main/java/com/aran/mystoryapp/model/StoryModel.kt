@@ -8,5 +8,6 @@ data class StoryModel(
     var name: String? = null,
     var image: String? = null,
     var description: String? = null,
-    var createAt: String? = null
+    var lat: Double? = null,
+    var lon: Double? = null
 ) : Parcelable

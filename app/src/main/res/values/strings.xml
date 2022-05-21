@@ -20,6 +20,10 @@
     <string name="fail_take_picture">Fail to take picture</string>
     <string name="fail_show_camera">Fail to show camera</string>
 
+    <string name="location_not_found">Your location is not found. Try Again</string>
+    <string name="your_location">Your Location</string>
+    <string name="story_uploaded_by">\"Story uploaded by \"</string>
+
     <string name="story_app">Story App</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -47,4 +51,5 @@
     <string name="sign_out">Sign Out</string>
     <string name="owner">Andi Rifqial Nur</string>
     <string name="from">from</string>
+    <string name="retry">Retry</string>
 </resources>

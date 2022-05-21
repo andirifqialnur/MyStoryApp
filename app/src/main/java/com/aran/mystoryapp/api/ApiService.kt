@@ -23,8 +23,16 @@ interface ApiService {
     ) : Call<SignInResponse>
 
     @GET("stories")
-    fun getStories(
-        @Header("Authorization") header: String
+    suspend fun getStories(
+        @Header("Authorization") header: String,
+        @Query("page") page: Int,
+        @Query("size") size: Int
+    ) : StoriesResponse
+
+    @GET("stories")
+    fun getStoriesWithLocation(
+        @Header("Authorization") header: String,
+        @Query("location") location: Int
     ) : Call<StoriesResponse>
 
     @Multipart
@@ -34,4 +42,14 @@ interface ApiService {
         @Part file: MultipartBody.Part,
         @Part("description") description: RequestBody,
     ): Call<Responses>
+
+    @Multipart
+    @POST("stories")
+    fun uploadStoriesWithLocation(
+        @Header("Authorization") header: String,
+        @Part file: MultipartBody.Part,
+        @Part("description") description: RequestBody,
+        @Part("lat") lat: Float,
+        @Part("lon") lon: Float
+    ) : Call<Responses>
 }

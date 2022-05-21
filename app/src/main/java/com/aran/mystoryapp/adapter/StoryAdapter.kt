@@ -9,45 +9,71 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.aran.mystoryapp.R
+import com.aran.mystoryapp.databinding.StoriesItemBinding
 import com.aran.mystoryapp.model.StoryModel
+import com.aran.mystoryapp.response.ListStoryItem
 import com.aran.mystoryapp.ui.DetailStoryActivity
 import com.bumptech.glide.Glide
 
-class StoryAdapter(private val listStories: ArrayList<StoryModel>) : RecyclerView.Adapter<StoryAdapter.ViewHolder>(){
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val img: ImageView = view.findViewById(R.id.image)
-        val name: TextView = view.findViewById(R.id.name)
-        val description: TextView = view.findViewById(R.id.description)
-    }
+class StoryAdapter : PagingDataAdapter<ListStoryItem, StoryAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(viewGroup.context).inflate(R.layout.stories_item, viewGroup, false))
-    }
+    class MyViewHolder(private val binding: StoriesItemBinding) :RecyclerView.ViewHolder(binding.root){
+        fun bind(data: ListStoryItem) {
+            Glide.with(binding.root.context)
+                .load(data.photoUrl)
+                .into(binding.image)
+            binding.name.text = data.name
 
-    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.name.text = listStories[position].name
-        viewHolder.description.text = listStories[position].description
-        Glide.with(viewHolder.itemView.context)
-            .load(listStories[position].image)
-            .into(viewHolder.img)
+            binding.root.setOnClickListener {
+                val story = StoryModel(
+                    data.name,
+                    data.photoUrl,
+                    data.description,
+                    null,
+                    null
+                )
 
-        viewHolder.itemView.setOnClickListener {
-            val optionsCompat: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                viewHolder.itemView.context as Activity,
-                Pair(viewHolder.img, "img_photo_detail_transition"),
-                Pair(viewHolder.name, "name_detail_transition"),
-                Pair(viewHolder.description, "description_detail_transition"),
-            )
+                val optionsCompat: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    binding.root.context as Activity,
+                    Pair(binding.image, "img_photo_detail_transition"),
+                    Pair(binding.name, "tv_name_detail_transition")
+                )
 
-            val intent = Intent(viewHolder.itemView.context, DetailStoryActivity::class.java)
-            intent.putExtra(DetailStoryActivity.DETAIL_STORY, listStories[position])
-            viewHolder.itemView.context.startActivity(intent, optionsCompat.toBundle())
+                val intent = Intent(binding.root.context, DetailStoryActivity::class.java)
+                intent.putExtra(DetailStoryActivity.DETAIL_STORY, story)
+                binding.root.context.startActivity(intent, optionsCompat.toBundle())
+            }
         }
     }
 
-    override fun getItemCount(): Int {
-        return listStories.size
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+        val binding = StoriesItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return MyViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        val data = getItem(position)
+        if(data != null) {
+            holder.bind(data)
+        }
+    }
+
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListStoryItem>() {
+            override fun areItemsTheSame(oldItem: ListStoryItem, newItem: ListStoryItem): Boolean {
+                return oldItem == newItem
+            }
+
+            override fun areContentsTheSame(
+                oldItem: ListStoryItem,
+                newItem: ListStoryItem
+            ): Boolean {
+                return oldItem == newItem
+            }
+        }
     }
 }

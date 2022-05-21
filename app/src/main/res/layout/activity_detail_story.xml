@@ -60,17 +60,6 @@
         app:layout_constraintStart_toStartOf="@+id/img"
         app:layout_constraintTop_toBottomOf="@+id/img" />
 
-    <TextView
-        android:id="@+id/create_at"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/qs_bold"
-        android:text="@string/created_at"
-        android:textSize="13sp"
-        android:layout_marginTop="15dp"
-        app:layout_constraintStart_toStartOf="@+id/description"
-        app:layout_constraintTop_toBottomOf="@+id/description" />
-
     <ProgressBar
         android:id="@+id/progress_bar"
         style="?android:attr/progressBarStyle"

@@ -21,7 +21,6 @@ class DetailStoryActivity : AppCompatActivity() {
             .into(binding.img)
         binding.name.text = story.name
         binding.description.text = story.description
-        binding.createAt.text = story.createAt
     }
 
     companion object {

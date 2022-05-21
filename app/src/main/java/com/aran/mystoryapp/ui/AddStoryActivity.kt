@@ -50,6 +50,14 @@ class AddStoryActivity : AppCompatActivity() {
         binding = ActivityAddStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val lat = intent.getFloatExtra(LAT, 1000f)
+        val lon = intent.getFloatExtra(LON, 1000f)
+
+        if(lat != 1000f && lon != 1000f) {
+            val location = "Latitude = $lat, \nLongitude = $lon"
+            binding.location.text = location
+        }
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
 
@@ -237,5 +245,8 @@ class AddStoryActivity : AppCompatActivity() {
 
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
         private const val REQUEST_CODE_PERMISSIONS = 10
+
+        const val LAT = "lat"
+        const val LON = "lon"
     }
 }

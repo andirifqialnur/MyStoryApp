@@ -5,11 +5,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -17,24 +14,22 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aran.mystoryapp.R
+import androidx.activity.viewModels
+import com.aran.mystoryapp.adapter.LoadingStateAdapter
 import com.aran.mystoryapp.adapter.StoryAdapter
-import com.aran.mystoryapp.api.ApiConfig
 import com.aran.mystoryapp.databinding.ActivityMainBinding
 import com.aran.mystoryapp.helper.SharedViewModel
 import com.aran.mystoryapp.helper.UserPreference
 import com.aran.mystoryapp.helper.ViewModelFactory
-import com.aran.mystoryapp.model.StoryModel
-import com.aran.mystoryapp.response.ListStoryItem
-import com.aran.mystoryapp.response.StoriesResponse
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var storyViewModel: SharedViewModel
+    private lateinit var sharedViewModel: SharedViewModel
+    private val storyViewModel: StoryViewModel by viewModels {
+        StoryViewModel.ViewModelFactory(this)
+    }
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,8 +37,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        storyViewModel = ViewModelProvider(this, ViewModelFactory(UserPreference.getInstance(dataStore)
-            ))[SharedViewModel::class.java]
+        setupViewModel()
 
         val layoutManager = LinearLayoutManager(this)
         binding.recycleview.layoutManager = layoutManager
@@ -55,7 +49,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    private fun setupViewModel() {
+        sharedViewModel = ViewModelProvider(
+            this,
+            ViewModelFactory(UserPreference.getInstance(dataStore))
+        )[SharedViewModel::class.java]
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.option_menu, menu)
         return true
@@ -63,6 +64,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
+            R.id.menu_map -> {
+                startActivity(Intent(this, StoryMapsActivity::class.java))
+            }
             R.id.menu_language -> {
                 startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
                 return true
@@ -82,68 +86,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getStories() {
-        showLoading(true)
-
-        storyViewModel.getUser().observe(this ) {
-            if(it != null) {
-                val client = ApiConfig.getApiService().getStories("Bearer " + it.token)
-                client.enqueue(object: Callback<StoriesResponse> {
-                    override fun onResponse(
-                        call: Call<StoriesResponse>,
-                        response: Response<StoriesResponse>
-                    ) {
-                        showLoading(false)
-                        val responseBody = response.body()
-                        Log.d(TAG, "onResponse: $responseBody")
-                        if(response.isSuccessful && responseBody?.message == "Stories fetched successfully") {
-                            setStoriesData(responseBody.listStory)
-                            Toast.makeText(this@MainActivity, getString(R.string.success_load_stories), Toast.LENGTH_SHORT).show()
-                        } else {
-                            Log.e(TAG, "onFailure1: ${response.message()}")
-                            Toast.makeText(this@MainActivity, getString(R.string.fail_load_stories), Toast.LENGTH_SHORT).show()
-                        }
-                    }
-
-                    override fun onFailure(call: Call<StoriesResponse>, t: Throwable) {
-                        showLoading(false)
-                        Log.e(TAG, "onFailure2: ${t.message}")
-                        Toast.makeText(this@MainActivity, getString(R.string.fail_load_stories), Toast.LENGTH_SHORT).show()
-                    }
-                })
+        val adapter = StoryAdapter()
+        binding.recycleview.adapter = adapter.withLoadStateFooter(
+            footer = LoadingStateAdapter {
+                adapter.retry()
+            }
+        )
+        sharedViewModel.getUser().observe(this) { userAuth ->
+            if(userAuth != null) {
+                storyViewModel.stories("Bearer " + userAuth.token).observe(this) { stories ->
+                    adapter.submitData(lifecycle, stories)
+                }
             }
         }
     }
 
-    private fun setStoriesData(items: List<ListStoryItem>) {
-        val listStories = ArrayList<StoryModel>()
-        for(item in items) {
-            val story = StoryModel(
-                item.name,
-                item.photoUrl,
-                item.description,
-                item.createdAt
-            )
-            listStories.add(story)
-        }
-
-        val adapter = StoryAdapter(listStories)
-        binding.recycleview.adapter = adapter
-    }
-
-    private fun showLoading(isLoading: Boolean) {
-        if (isLoading) {
-            binding.progressBar.visibility = View.VISIBLE
-        } else {
-            binding.progressBar.visibility = View.GONE
-        }
-    }
-
     private fun signOut() {
-        storyViewModel.signOut()
+        sharedViewModel.signOut()
         startActivity(Intent(this, SignInActivity::class.java))
-    }
-
-    companion object {
-        private const val TAG = "Story Activity"
     }
 }

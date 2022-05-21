@@ -27,6 +27,10 @@
     <string name="fail_take_picture">Gagal mengambil gambar</string>
     <string name="fail_show_camera">Gagal memunculkan kamera</string>
 
+    <string name="location_not_found">Lokasi Anda Tidak Diketahui. Coba Lagi</string>
+    <string name="your_location">Lokasi Anda</string>
+    <string name="story_uploaded_by">\"Di Upload Oleh \"</string>
+
     <string name="sign_in">Masuk</string>
     <string name="top_desc">| Bagikan pengalaman mu</string>
     <string name="desc_signin">Kami merindukanmu</string>
